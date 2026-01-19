@@ -1,0 +1,44 @@
+name: Expand GitBook Aliases
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  expand-links:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Expand GitBook aliases
+        run: |
+          set -e
+
+          echo "Expanding GitBook aliases..."
+
+          find . -type f -name "*.md" -print0 | xargs -0 sed -i \
+            -e 's|{server}|https://app.gitbook.com/s/SsmexDFPv2xG2OTyO5yV|g' \
+            -e 's|{galera}|https://app.gitbook.com/o/diTpXxF5WsbHqTReoBsS/s/3VYeeVGUV4AMqrA3zwy7|g'
+
+          echo "Git status after replacement:"
+          git status --short
+
+      - name: Commit changes if needed
+        run: |
+          if git diff --quiet; then
+            echo "No alias replacements needed."
+            exit 0
+          fi
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git commit -am "docs: expand GitBook aliases"
+          git push

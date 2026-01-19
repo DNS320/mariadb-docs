@@ -1,18 +1,16 @@
 ---
 description: >-
-  Technical reference for building plugins that enforce specific security
+  General introduction into plugins that enforce specific security
   policies and complexity rules for user passwords.
 ---
 
-# Password Validation Plugin API
-
-{% include "../../../.gitbook/includes/this-page-contains-backgrou....md" %}
+# Password Validation Plugin Overview
 
 _Password validation_ means ensuring that user passwords meet certain minimal security requirements. A dedicated plugin API allows the creation of password validation plugins that will check user passwords as they are set (in [SET PASSWORD](../../sql-statements/account-management-sql-statements/set-password.md) and [GRANT](../../sql-statements/account-management-sql-statements/grant.md) statements) and either allow or reject them.
 
 ## SQL-Level Extensions
 
-MariaDB comes with three password validation plugins — the [simple\_password\_check](../../plugins/password-validation-plugins/simple-password-check-plugin.md) plugin, the [cracklib\_password\_check](../../plugins/password-validation-plugins/cracklib-password-check-plugin.md) plugin and the [password\_reuse\_check](../../plugins/password-validation-plugins/password-reuse-check-plugin.md) plugin. They are not enabled by default – use [INSTALL SONAME](../../sql-statements/administrative-sql-statements/plugin-sql-statements/install-soname.md) (or [INSTALL PLUGIN](../../sql-statements/administrative-sql-statements/plugin-sql-statements/install-plugin.md)) statement to install them.
+MariaDB comes with three password validation plugins — the [simple\_password\_check](simple-password-check-plugin.md) plugin, the [cracklib\_password\_check](cracklib-password-check-plugin.md) plugin and the [password\_reuse\_check](password-reuse-check-plugin.md) plugin. They are not enabled by default – use [INSTALL SONAME](../../sql-statements/administrative-sql-statements/plugin-sql-statements/install-soname.md) (or [INSTALL PLUGIN](../../sql-statements/administrative-sql-statements/plugin-sql-statements/install-plugin.md)) statement to install them.
 
 When at least one password plugin is loaded, all new passwords will be validated and password-changing statements will fail if the password will not pass validation checks. Several password validation plugin can be loaded at the same time — in this case a password must pass **all** validation checks by **all** plugins.
 
@@ -75,12 +73,6 @@ Strict password validation:
 GRANT SELECT ON *.* TO foo IDENTIFIED BY PASSWORD '2222222222222222';
 ERROR HY000: The MariaDB server is running with the --strict-password-validation option so it cannot execute this statement
 ```
-
-## Plugin API
-
-Password validation plugin API is very simple. A plugin must implement only one method — `validate_password()`. This method takes two arguments — user name and the plain-text password. And it returns 0 when the password has passed the validation and 1 otherwise,
-
-See also `mysql/plugin_password_validation.h` and password validation plugins in `plugin/simple_password_check/` and `plugins/cracklib_password_check/`.
 
 <sub>_This page is licensed: CC BY-SA / Gnu FDL_</sub>
 

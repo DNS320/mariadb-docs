@@ -33,10 +33,6 @@ This section contains background information, mostly aimed at engineers developi
 [encryption-plugin-api.md](encryption-plugin-api.md)
 {% endcontent-ref %}
 
-{% content-ref url="password-validation.md" %}
-[password-validation.md](password-validation.md)
-{% endcontent-ref %}
-
 {% content-ref url="audit-plugin-development.md" %}
 [audit-plugin-development.md](audit-plugin-development.md)
 {% endcontent-ref %}
